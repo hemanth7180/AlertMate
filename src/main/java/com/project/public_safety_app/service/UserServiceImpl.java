@@ -154,7 +154,32 @@ public class UserServiceImpl implements UserService{
     }
 
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(EntityUtil::convertToDTO).toList();
+//        return userRepository.findAll().stream().map(EntityUtil::convertToDTO).toList();
+        List<User> users = userRepository.findAll();
+
+        // Map each user to a UserResponse and add HATEOAS links
+        return users.stream().map(user -> {
+            UserResponse userResponse = new UserResponse();
+
+            // Populate UserResponse with user details
+            userResponse.setUserId(user.getUserId());
+            userResponse.setUserName(user.getUserName());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setUserPhoneNumber(user.getUserPhoneNumber());
+            userResponse.setPassword(user.getPassword());  // Note: You might want to omit this field for security reasons.
+            userResponse.setContacts(user.getContacts());
+            userResponse.setDiscussions(user.getDiscussions());
+            userResponse.setSafetyCheckIns(user.getSafetyCheckIns());
+            userResponse.setSafetyReports(user.getSafetyReports());
+            userResponse.setQuizzes(user.getQuizzes());
+            userResponse.setDOB(user.getDOB());
+
+            // Add HATEOAS links for each user
+            userResponse.addLinks(user.getUserName());
+
+            return userResponse;
+        }).collect(Collectors.toList());
+
     }
 
     @Override
