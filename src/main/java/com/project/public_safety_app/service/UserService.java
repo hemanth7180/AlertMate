@@ -14,7 +14,7 @@ public interface UserService {
     UserDto getUserByName(String name);
     void deleteUserByName(String name);
     List<EmergencyContactDto> getUserContactsByUsername(String username);
-    List<UserDto> getAllUsers();
+    List<UserResponse> getAllUsers();
     UserResponse getUser(String userName);
 
 
